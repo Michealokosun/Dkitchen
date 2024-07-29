@@ -7,18 +7,22 @@ import { addtocart, decrementqnty, incrementqnty } from "@/store/cartreducer";
 import { useState } from "react";
 import plusicon from "../../public/images/icon-increment-quantity.svg";
 import minusicon from "../../public/images/icon-decrement-quantity.svg";
+import toast from "react-hot-toast";
 export default function Productcard({ product }) {
   const [btnqnty, showqnty] = useState(false);
   const dispatch = useDispatch(addtocart);
   const handleaddtocartclick = () => {
     dispatch(addtocart(product));
     showqnty(product.active);
+    toast.success("Added successfully");
   };
   const handleincrement = () => {
     dispatch(incrementqnty(product));
+    toast.success("Added to item successful");
   };
   const handledecrement = () => {
     dispatch(decrementqnty(product));
+    toast.success("removed from item successful");
   };
   return (
     <div className="group relative">
