@@ -1,4 +1,6 @@
+"use client";
 import {
+  CloseButton,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
@@ -8,21 +10,49 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-
+import close from "../../public/images/icon-remove-item.svg";
+import carbon from "../../public/images/icon-carbon-neutral.svg";
+import Image from "next/image";
+import Cart from "./cart";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 const navigation = [
   { name: "Dashboard", href: "#", current: true },
   { name: "Team", href: "#", current: false },
   { name: "Projects", href: "#", current: false },
   { name: "Calendar", href: "#", current: false },
 ];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Navbar() {
+  const [showcart, setshowcart] = useState(false);
+  const cartitem = useSelector((store) => store.cart);
   return (
-    <Disclosure as="nav" className="bg-white">
+    <Disclosure as="nav" className="bg-white overlow-hidden relative">
+      <div
+        className={
+          showcart
+            ? "mobilecart bg-white   w-full flex-col    ease-in-out  flex md:hidden fixed z-50 top-0 left-0 h-screen justify-center items-center  "
+            : "translate-x-full mobilecart bg-white   w-full flex-col    ease-in-out  flex md:hidden fixed z-50 top-0 left-0 h-screen justify-center items-center"
+        }
+      >
+        <div
+          onClick={() => setshowcart(false)}
+          className="closebtn flex justify-end w-full  px-10"
+        >
+          <Image
+            className="border p-2 rounded-full bg-red-600"
+            width={50}
+            height={50}
+            src={close}
+          />
+        </div>
+        <div>
+          <Cart />
+        </div>
+      </div>
       <div className="mx-auto max-w-full px-2 sm:px-6 lg:px-20">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -41,31 +71,9 @@ export default function Navbar() {
             </DisclosureButton>
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex flex-shrink-0 items-center">
-              <img
-                alt="Your Company"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
-              />
-            </div>
-            <div className="hidden sm:ml-6 sm:block">
-              <div className="flex space-x-4">
-                {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    aria-current={item.current ? "page" : undefined}
-                    className={classNames(
-                      item.current
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-400 hover:bg-gray-700 hover:text-white",
-                      "rounded-md px-3 py-2 text-sm font-medium"
-                    )}
-                  >
-                    {item.name}
-                  </a>
-                ))}
-              </div>
+            <div className="flex flex-shrink-0  items-end italic text-sm">
+              <Image src={carbon} width={40} height={40} />
+              <span className="font-bold text-green-400">D_kitchen_</span>
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -80,11 +88,22 @@ export default function Navbar() {
 
             {/* --------------------- CART ICON ----------------------------- */}
             <button
+              data-drawer-target="drawer-example"
+              data-drawer-show="drawer-example"
+              aria-controls="drawer-example"
               type="button"
+              onClick={() => setshowcart(!showcart)}
               className="relative rounded-full md:hidden block bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
             >
               <span className="absolute -inset-1.5" />
               <span className="sr-only">View Cart</span>
+              {cartitem.length !== 0 ? (
+                <span className="absolute top-0 -right-2 text-white text-xs bg-red-700  px-1 rounded-full">
+                  {cartitem.length}
+                </span>
+              ) : (
+                ""
+              )}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

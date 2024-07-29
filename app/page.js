@@ -1,6 +1,5 @@
 import Productlist from "./components/productlist";
 import Cart from "./components/cart";
-
 export default function Home() {
   return (
     <main className=" lg:p-10 sm:p-5">
